@@ -99,6 +99,10 @@ def Get_Adjacency_Matrix(nb_Vertex):
     return matrix
     
 
+def test():
+    print('cool')
+
+
 if __name__ == "__main__":
     nb_Vertex = 6
 
