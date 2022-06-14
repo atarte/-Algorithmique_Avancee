@@ -2,12 +2,12 @@ import numpy as np
 from numpy.linalg import matrix_power
 import random as rand
 
-def Init_Matrix(nb_Vertex):
+def Init_Matrix(nb_vertex):
     '''
-    Returns a null square matrix of order <nb_Vertex>
+    Returns a null square matrix of order <nb_vertex>
     '''
-    rows = nb_Vertex
-    cols = nb_Vertex
+    rows = nb_vertex
+    cols = nb_vertex
 
     matrix = []
     for r in range(0, rows):
@@ -22,21 +22,22 @@ def Fix_Matrix_Not_Connected(matrix):
     '''
     print('fix matrix')
 
-    nb_Vertex = len(matrix)
+    nb_vertex = len(matrix)
 
     adjacency_matrix = np.asarray(matrix)
     np.fill_diagonal(adjacency_matrix, 1)
 
     # en theorie il faut mettre les poid a 1
 
-    adjacency_matrix = matrix_power(adjacency_matrix, nb_Vertex)
+    adjacency_matrix = matrix_power(adjacency_matrix, nb_vertex)
 
-    rand_vertex = rand.randint(0, nb_Vertex -1)
+    rand_vertex = rand.randint(0, nb_vertex -1)
 
     neighbour_to_connect = [ index for index, value in enumerate(matrix[rand_vertex]) if value == 0 and index != rand_vertex ]
     new_neighbour = rand.choice(neighbour_to_connect)
 
-    weight = 1
+    # weight = 1
+    weight = rand.randint(1, 10)
 
     matrix[rand_vertex][new_neighbour] = weight
     matrix[new_neighbour][rand_vertex] = weight
@@ -53,18 +54,17 @@ def Check_Matrix_Connected(matrix):
     '''
     print('check matrix')
 
-    nb_Vertex = len(matrix)
+    nb_vertex = len(matrix)
 
     adjacency_matrix = np.asarray(matrix)
     np.fill_diagonal(adjacency_matrix, 1)
 
-    # for i in range(nb_Vertex):
-    #     for j in range(nb_Vertex):
+    # for i in range(nb_vertex):
+    #     for j in range(nb_vertex):
     #         if adjacency_matrix[i][j] != 0:
     #             adjacency_matrix[i][j] = 1
 
-    adjacency_matrix = matrix_power(adjacency_matrix, nb_Vertex)
-    # print(adjacency_matrix)
+    adjacency_matrix = matrix_power(adjacency_matrix, nb_vertex)
 
     for line in adjacency_matrix:
         if not 0 in line:
@@ -73,13 +73,13 @@ def Check_Matrix_Connected(matrix):
     return False
 
 
-def Get_Neighbour_List(nb_Vertex):
+def Get_Neighbour_List(nb_vertex):
     '''
     Returns a list containning the number of neighbour each vertex will have
     '''
-    order_min = (nb_Vertex - 1) * 2
-    order_max = (nb_Vertex - 1) * nb_Vertex
-    nb_neighbour_max = nb_Vertex - 1
+    order_min = (nb_vertex - 1) * 2
+    order_max = (nb_vertex - 1) * nb_vertex
+    nb_neighbour_max = nb_vertex - 1
     # nb_neighbour_max = 5/6 plutard
     nb_neighbour_min = 1
     # nb_neighbour_min = 2 plutard
@@ -90,7 +90,7 @@ def Get_Neighbour_List(nb_Vertex):
     while order_total % 2 != 0 or order_total <= order_min or order_total >= order_max:
         neighbour_list = []
 
-        for i in range(nb_Vertex):
+        for i in range(nb_vertex):
             neighbour_list.append([
                 i,
                 rand.randint(nb_neighbour_min, nb_neighbour_max),
@@ -101,15 +101,14 @@ def Get_Neighbour_List(nb_Vertex):
     return neighbour_list
 
 
-def Get_Adjacency_Matrix(nb_Vertex):
+def Get_Adjacency_Matrix(nb_vertex):
     '''
-    Returns an adjacene matrix for <nb_Vertex> vertices
+    Returns an adjacene matrix for <nb_vertex> vertices
     '''
-    matrix = Init_Matrix(nb_Vertex)
-    neighbour_list = Get_Neighbour_List(nb_Vertex)
+    matrix = Init_Matrix(nb_vertex)
+    neighbour_list = Get_Neighbour_List(nb_vertex)
     neighbour_list_sorted = sorted(neighbour_list, key=lambda x:x[1], reverse=True)
 
-    # Fill the adjacencie matrix
     for vertex in neighbour_list_sorted:
 
         vertex_index = vertex[0]
@@ -117,7 +116,7 @@ def Get_Adjacency_Matrix(nb_Vertex):
 
         neighbour_allow = []
 
-        for i in range(nb_Vertex):
+        for i in range(nb_vertex):
 
             if i == vertex_index:
                 continue
@@ -140,8 +139,8 @@ def Get_Adjacency_Matrix(nb_Vertex):
         vertex_neighbour_list = rand.sample(neighbour_allow, vertex_nb_neighbour)
 
         for vertex_neighbour in vertex_neighbour_list:
-            weight = 1
-            # weight = rand.randint(1, 10)
+            # weight = 1
+            weight = rand.randint(1, 10)
 
             matrix[vertex_index][vertex_neighbour] = weight
             matrix[vertex_neighbour][vertex_index] = weight
@@ -153,9 +152,9 @@ def Get_Adjacency_Matrix(nb_Vertex):
     
 
 if __name__ == "__main__":
-    nb_Vertex = 6
+    nb_vertex = 6
 
-    matrix = Get_Adjacency_Matrix(nb_Vertex)
+    matrix = Get_Adjacency_Matrix(nb_vertex)
     # matrix = [
     #     [0, 2, 5, 0, 0],
     #     [2, 0, 2, 0, 0],
