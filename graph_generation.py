@@ -2,6 +2,9 @@ import numpy as np
 import random as rand
 
 def Init_Matrix(nb_Vertex):
+    '''
+    Returns a null square matrix of order <nb_Vertex>
+    '''
     rows = nb_Vertex
     cols = nb_Vertex
 
@@ -13,36 +16,49 @@ def Init_Matrix(nb_Vertex):
 
 
 def Check_Matrix_Connected(matrix):
+    '''
+    Returns a boolean to check if an adjacency matrix matches a connected graph
+
+    True : the graph is connected
+    Fasle : the graph is not connected
+    '''
     return true
 
 
-def Get_Matrix(nb_Vertex):
-    matrix = Init_Matrix(nb_Vertex)
-
+def Get_Neighbour_List(nb_Vertex):
+    '''
+    Returns a list containning the number of neighbour each vertex will have
+    '''
     order_min = (nb_Vertex - 1) * 2
     order_max = (nb_Vertex - 1) * nb_Vertex
-
     nb_neighbour_max = nb_Vertex - 1
     # nb_neighbour_max = 5/6 plutard
     nb_neighbour_min = 1
     # nb_neighbour_min = 2 plutard
 
-    # Get the number of neighbour for each vertex
     neighbour_list = []
     order_total = 1
 
-    while order_total%2 != 0 or order_total <= order_min or order_total >= order_max:
-
+    while order_total % 2 != 0 or order_total <= order_min or order_total >= order_max:
         neighbour_list = []
 
         for i in range(nb_Vertex):
             neighbour_list.append([
-                i, 
+                i,
                 rand.randint(nb_neighbour_min, nb_neighbour_max),
             ])
 
         order_total = np.sum(neighbour_list, axis=0)[1]
+    
+    return neighbour_list
 
+
+def Get_Adjacency_Matrix(nb_Vertex):
+    '''
+    Returns an adjacene matrix for <nb_Vertex> vertices
+    '''
+    matrix = Init_Matrix(nb_Vertex)
+    neighbour_list = Get_Neighbour_List(nb_Vertex)
     neighbour_list_sorted = sorted(neighbour_list, key=lambda x:x[1], reverse=True)
 
     # Fill the adjacencie matrix
@@ -86,7 +102,7 @@ def Get_Matrix(nb_Vertex):
 if __name__ == "__main__":
     nb_Vertex = 6
 
-    matrix = Get_Matrix(nb_Vertex)
+    matrix = Get_Adjacency_Matrix(nb_Vertex)
 
     print('matrix : ')
     for m in matrix:
