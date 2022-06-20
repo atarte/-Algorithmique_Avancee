@@ -1,11 +1,17 @@
 import shortest_path_Dijkstra as sp
 
-def Convert_Tsp_to_Uncomplete_Graph():
+def Get_Full_Path_from_Tsp_Path(graph, path):
     '''
     Returns
     '''
+    full_path = [path[0]]
+
+    for i in range(len(path) - 1):
+        vertex_betwwen = sp.Path_Between_Two_Verteces(graph, path[i], path[i + 1])
+
+        full_path += vertex_betwwen[1:]
     
-    return []
+    return full_path
 
 
 def Convert_Uncomplete_Graph_To_Tsp(matrix, cities):

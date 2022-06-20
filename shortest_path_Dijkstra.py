@@ -26,12 +26,47 @@ def Shortest_Path(graph, starting_vertex):
     for cout in range(nb_vertex):
         u = Min_Distance(dist, sptSet)
         sptSet[u] = True
+        
+        for v in range(nb_vertex):
+            if graph[u][v] > 0 and sptSet[v] == False and dist[v] > dist[u] + graph[u][v]:
+                dist[v] = dist[u] + graph[u][v]
+
+    return dist
+
+
+def Path_Between_Two_Verteces(graph, vertex_1, vertex_2):
+    '''
+    Returns  
+    '''
+    nb_vertex = len(graph)
+    dist = [sys.maxsize] * nb_vertex
+    dist[vertex_1] = 0
+    sptSet = [False] * nb_vertex
+
+    path = [[]] * nb_vertex
+    # path[starting_vevertex_1rtex] = [starting_vertex, [starting_vertex]]
+    path[vertex_1] = [vertex_1]
+
+    for cout in range(nb_vertex):
+        u = Min_Distance(dist, sptSet)
+        sptSet[u] = True
+
+        stop = False
 
         for v in range(nb_vertex):
             if graph[u][v] > 0 and sptSet[v] == False and dist[v] > dist[u] + graph[u][v]:
                 dist[v] = dist[u] + graph[u][v]
- 
-    return dist
+                
+                # path[v] = [dist[v], path[u][1] + [v]]
+                path[v] = path[u] + [v]
+
+                if v == vertex_2:
+                    stop = True
+                    break
+        if stop:
+            break
+    
+    return path[vertex_2]
 
 
 if __name__ == '__main__':

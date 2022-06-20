@@ -1,6 +1,8 @@
 import graph_generation as gg
 import convertion_TSP as ct
 import tsp_ant as ant
+import shortest_path_Dijkstra as short
+import experience_plan as expl
 
 from matplotlib import style
 import matplotlib.pyplot as plt
@@ -22,7 +24,7 @@ def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
 
 def Draw_Graph(graph, cities_to_pass=[], path=[]):
     '''
-    Draw a graoh from an adjacency matrix
+    Draw a graph from an adjacency matrix
     '''
     G = nx.Graph()
 
@@ -89,33 +91,48 @@ def Draw_Graph(graph, cities_to_pass=[], path=[]):
 
 
 if __name__ == '__main__':
-    nb_vertex = 10
+    # complete_matrix = expl.Convert_to_complete(tsp_matrix, cities_to_pass)
+    # expl.Borne(len(complete_matrix), complete_matrix)
+
+    nb_vertex = 20
     # nb_vertex = 10
-    nb_cities_to_pass = 5
+    nb_cities_to_pass = 10
+    # nb_cities_to_pass = nb_vertex
 
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
     cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
-    print(cities_to_pass)
+    # print(cities_to_pass)
 
     tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, cities_to_pass)
 
+    # s = short.Path_Between_Two_Verteces(matrix, 0, 4)
+    # print('res : ', s)
+
+    # Draw_Graph(tsp_matrix)
+
+    
     # Draw_Graph(matrix, cities_to_pass=cities_to_pass)
     # print(matrix)
-    print('matrix : ')
-    for m in matrix:
-        print(m)
+    # print('matrix : ')
+    # for m in matrix:
+    #     print(m)
 
-    # print(tsp_matrix)
-    print('matrix tsp : ')
-    for m in tsp_matrix:
-        print(m)
+    # # print(tsp_matrix)
+    # print('matrix tsp : ')
+    # for m in tsp_matrix:
+    #     print(m)
 
     path = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
     print('optimal path : ', path)
     print('optimal path lenght : ', ant.Get_Path_Lenght(tsp_matrix, path))
 
     # Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
+
+    full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
+    print(full_path)
+
+    Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
 
     
 
