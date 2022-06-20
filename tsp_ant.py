@@ -1,13 +1,13 @@
 import sys
 import random as rand
 
-def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city):
+def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta):
     '''
     Returns a city where the random proportional transition rule 
     '''
 
-    alpha = 1.0
-    beta = 2.0
+    # alpha = 1.0
+    # beta = 2.0
 
     available_cities = [city for city in cities_to_pass if city not in path]
 
@@ -38,16 +38,16 @@ def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city):
     return probabilities_list_sorted[0][0]
 
 
-def Update_Pheromone(pheromone_matrix, path, path_lenght):
+def Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread):
     '''
     Returns the pheromone matrix after updating the pheromone trails
     '''
-    evaporation_factor = 0.3 # 30% des phéromone sévapore
+    # evaporation_factor = 0.3 # 30% des phéromone sévapore
 
     for i in range(len(pheromone_matrix)):
         for j in range(len(pheromone_matrix)):
             pheromone_matrix[i][j] *= (1 - evaporation_factor)
-    pheromone_spread = 1.0
+    # pheromone_spread = 1.0
     pheromone_to_apply = pheromone_spread / path_lenght
 
     for i in range(len(path) - 1):
@@ -69,7 +69,7 @@ def Get_Path_Lenght(graph, path):
     return path_lenght
 
 
-def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10):
+def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, beta=2.0, evaporation_factor=0.3, pheromone_spread=1.0):
     '''
     Returns the optimal path through the verteces <cities_to_pass> of the graph <graph> with the algoritm "Ant Colony Optimization"
     '''
@@ -94,7 +94,7 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10):
 
             for _ in range(len(cities_to_pass) - 1):
 
-                next_city = Get_Next_City(graph, pheromone_matrix, path, cities_to_pass, current_city)
+                next_city = Get_Next_City(graph, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta)
                 path.append(next_city)
                 current_city = next_city
 
@@ -104,7 +104,7 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10):
             if path_lenght < shortest_path:
                 best_path = path
 
-            pheromone_matrix = Update_Pheromone(pheromone_matrix, path, path_lenght)
+            pheromone_matrix = Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread)
 
     return best_path
 

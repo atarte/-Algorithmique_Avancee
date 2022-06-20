@@ -1,3 +1,5 @@
+import tsp_ant as tsp_ant
+
 from pulp import *
 from copy import *
 
@@ -37,3 +39,18 @@ def Borne(nb_vertex, tsp_matrix):
 
     prob.solve()
     return value(prob.objective) if (LpStatus[prob.status] == "Optimal") else None
+
+
+def Limit_Ant(graph, cities_to_pass):
+    '''
+    ok
+    '''
+
+    for interation in range(100, 1100, 100):
+        for ant in range(10, 210, 10):
+            for alpha in range(0.1, 5.0, 0.1):
+                for beta in range(0.1, 5.0, 0.1):
+                    for evaporation_factor in range(0.1, 1.0, 0.1):
+                        for pheromone_spread in range(0.5, 5.0, 0.5):
+                            _ = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha, beta=beta, evaporation_factor=evaporation_factor, pheromone_spread=pheromone_spread)
+                            
