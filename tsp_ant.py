@@ -79,7 +79,7 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
     for i in range(len(pheromone_matrix)):
         pheromone_matrix[i][i] = 0
 
-    best_path = []
+    best_path = ()
     path = []
     shortest_path = sys.maxsize
 
@@ -99,14 +99,16 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
                 current_city = next_city
 
             path.append(path[0])
+            path = tuple(path)
 
             path_lenght = Get_Path_Lenght(graph, path)
             if path_lenght < shortest_path:
                 best_path = path
+                shortest_path = path_lenght
 
             pheromone_matrix = Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread)
 
-    return best_path
+    return best_path, shortest_path
 
 
 if __name__ == '__main__':

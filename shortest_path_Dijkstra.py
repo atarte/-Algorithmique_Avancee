@@ -31,7 +31,7 @@ def Shortest_Path(graph, starting_vertex):
             if graph[u][v] > 0 and sptSet[v] == False and dist[v] > dist[u] + graph[u][v]:
                 dist[v] = dist[u] + graph[u][v]
 
-    return dist
+    return tuple(dist)
 
 
 def Path_Between_Two_Verteces(graph, vertex_1, vertex_2):

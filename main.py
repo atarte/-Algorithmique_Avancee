@@ -1,14 +1,15 @@
 import graph_generation as gg
 import convertion_TSP as ct
 import tsp_ant as ant
-import shortest_path_Dijkstra as short
+# import shortest_path_Dijkstra as short
 import experience_plan as expl
 
 from matplotlib import style
+from random import sample
 import matplotlib.pyplot as plt
 import networkx as nx
 
-import random as rand
+# import random as rand
 
 def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
     '''
@@ -18,8 +19,10 @@ def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
     '''
     if nb_cities_to_pass > nb_vertex:
         nb_cities_to_pass = nb_vertex
+    elif nb_cities_to_pass < 0:
+        nb_cities_to_pass = 0
         
-    return rand.sample(range(nb_vertex), nb_cities_to_pass)
+    return tuple(sample(range(nb_vertex), nb_cities_to_pass))
 
 
 def Draw_Graph(graph, cities_to_pass=[], path=[]):
@@ -104,7 +107,7 @@ if __name__ == '__main__':
     cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
     # print(cities_to_pass)
 
-    tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, cities_to_pass)
+    tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
     # s = short.Path_Between_Two_Verteces(matrix, 0, 4)
     # print('res : ', s)
@@ -123,9 +126,9 @@ if __name__ == '__main__':
     # for m in tsp_matrix:
     #     print(m)
 
-    path = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
+    path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
     print('optimal path : ', path)
-    print('optimal path lenght : ', ant.Get_Path_Lenght(tsp_matrix, path))
+    print('optimal path lenght : ', path_lenght)
 
     # Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
 
