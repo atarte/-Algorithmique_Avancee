@@ -52,5 +52,5 @@ def Limit_Ant(graph, cities_to_pass):
                 for beta in range(0.1, 5.0, 0.1):
                     for evaporation_factor in range(0.1, 1.0, 0.1):
                         for pheromone_spread in range(0.5, 5.0, 0.5):
-                            _ = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha, beta=beta, evaporation_factor=evaporation_factor, pheromone_spread=pheromone_spread)
-                            
+                            _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha, beta=beta, evaporation_factor=evaporation_factor, pheromone_spread=pheromone_spread)
+
