@@ -90,18 +90,21 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
 
     list_average = []
 
-    for interation in VarIteration:
-        for ant in VarAnt:
-            for alpha in VarAlpha:
-                for beta in VarBeta:
-                    for evaporation_factor in VarEvap:
-                        for pheromone_spread in VarPheromone:
+    for alpha in VarAlpha:
+        for beta in VarBeta:
+            for evaporation_factor in VarEvap:
+                for pheromone_spread in VarPheromone:
+                    for interation in VarIteration:
+                        for ant in VarAnt:
                             current_values = []
+
                             for _ in range(nb_test):
                                 _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha/10, beta=beta/10, evaporation_factor=evaporation_factor/10, pheromone_spread=pheromone_spread/10)
+                                
                                 current_values.append((path_lenght / limit) * 100)
                                 value += 1
                                 Textbar.update(value)
+                                
                             list_average.append(np.mean(current_values))
 
     Textbar.finish()
