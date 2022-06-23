@@ -5,11 +5,13 @@ import tsp_ant as ant
 import experience_plan as expl
 
 from matplotlib import style
-from random import sample
+# from random import sample
+import random as rand
 import matplotlib.pyplot as plt
 import networkx as nx
+import time
+# import functools
 
-# import random as rand
 
 def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
     '''
@@ -22,7 +24,7 @@ def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
     elif nb_cities_to_pass < 0:
         nb_cities_to_pass = 0
         
-    return tuple(sample(range(nb_vertex), nb_cities_to_pass))
+    return tuple(rand.sample(range(nb_vertex), nb_cities_to_pass))
 
 
 def Draw_Graph(graph, cities_to_pass=[], path=[]):
@@ -97,10 +99,10 @@ if __name__ == '__main__':
     # complete_matrix = expl.Convert_to_complete(tsp_matrix, cities_to_pass)
     # expl.Borne(len(complete_matrix), complete_matrix)
 
+    # rand.seed(a=3)
+
     nb_vertex = 20
-    # nb_vertex = 10
     nb_cities_to_pass = 10
-    # nb_cities_to_pass = nb_vertex
 
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
@@ -109,33 +111,25 @@ if __name__ == '__main__':
 
     tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
-    # s = short.Path_Between_Two_Verteces(matrix, 0, 4)
-    # print('res : ', s)
-
-    # Draw_Graph(tsp_matrix)
-
-    
-    # Draw_Graph(matrix, cities_to_pass=cities_to_pass)
-    # print(matrix)
-    # print('matrix : ')
-    # for m in matrix:
-    #     print(m)
-
-    # # print(tsp_matrix)
-    # print('matrix tsp : ')
-    # for m in tsp_matrix:
-    #     print(m)
-
+    start = time.process_time()
     path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
-    print('optimal path : ', path)
-    print('optimal path lenght : ', path_lenght)
+    stop = time.process_time()
+    print("calculé en ", stop-start, 's')
+
+    # info1 = ant.Ant_Tsp.cache_info()
+    # info2 = ant.Get_Path_Lenght.cache_info()
+    # print(info1)
+    # print(info2)
+
+    # print('optimal path : ', path)
+    # print('optimal path lenght : ', path_lenght)
 
     # Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
 
-    full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
-    print(full_path)
+    # full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
+    # print(full_path)
 
-    Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
+    # Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
 
     
 

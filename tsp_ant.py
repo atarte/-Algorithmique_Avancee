@@ -1,6 +1,8 @@
 import sys
 import random as rand
+# from functools import lru_cache
 
+# @lru_cache(maxsize=1024)
 def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta):
     '''
     Returns a city where the random proportional transition rule 
@@ -38,6 +40,7 @@ def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, 
     return probabilities_list_sorted[0][0]
 
 
+# @lru_cache(maxsize=1024)
 def Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread):
     '''
     Returns the pheromone matrix after updating the pheromone trails
@@ -57,6 +60,7 @@ def Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, ph
     return pheromone_matrix
 
 
+# @lru_cache(maxsize=1024)
 def Get_Path_Lenght(graph, path):
     '''
     Returns the length of a path
@@ -69,6 +73,7 @@ def Get_Path_Lenght(graph, path):
     return path_lenght
 
 
+# @lru_cache(maxsize=1024)
 def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, beta=2.0, evaporation_factor=0.3, pheromone_spread=1.0):
     '''
     Returns the optimal path through the verteces <cities_to_pass> of the graph <graph> with the algoritm "Ant Colony Optimization"
@@ -111,5 +116,4 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
     return best_path, shortest_path
 
 
-if __name__ == '__main__':
-    print('cool')
+# if __name__ == '__main__':
