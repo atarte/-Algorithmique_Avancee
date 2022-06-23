@@ -7,19 +7,17 @@ def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, 
     '''
     Returns a city where the random proportional transition rule 
     '''
+    denominator_sum = 0
+    probabilities_list = []
     available_cities = [city for city in cities_to_pass if city not in path]
 
-    # if len(available_cities) == 0:
-    #     return
-
-    denominator_sum = 0
+    if len(available_cities) == 0:
+        return
 
     for city in available_cities:
         intensity = pheromone_matrix[current_city][city]
         visibility = 1 / matrix[current_city][city]
         denominator_sum += pow(intensity, alpha) * pow(visibility, beta)
-
-    probabilities_list = []
 
     for city in available_cities:
         intensity = pheromone_matrix[current_city][city]
@@ -89,6 +87,9 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
             for _ in range(len(cities_to_pass) - 1):
 
                 next_city = Get_Next_City(graph, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta)
+                if next_city == None:
+                    break
+                
                 path.append(next_city)
                 current_city = next_city
 
