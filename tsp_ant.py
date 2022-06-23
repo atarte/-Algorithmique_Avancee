@@ -11,13 +11,36 @@ def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, 
     probabilities_list = []
     available_cities = [city for city in cities_to_pass if city not in path]
 
-    if len(available_cities) == 0:
-        return
+    # if len(available_cities) == 0:
+    #     return
 
     for city in available_cities:
         intensity = pheromone_matrix[current_city][city]
         visibility = 1 / matrix[current_city][city]
         denominator_sum += pow(intensity, alpha) * pow(visibility, beta)
+
+    if denominator_sum == 0:
+        print('city avai : ', available_cities)
+        print('current_city : ', current_city)
+        # print('city : ', city)
+        print('path : ', path)
+        print('pheromone_matrix : ', pheromone_matrix)
+        print('alpha : ', alpha)
+        print('beta : ', beta)
+
+        print()
+        for city in available_cities:
+            print('city : ', city)
+            intensity = pheromone_matrix[current_city][city]
+            print('intensity : ', intensity)
+
+            visibility = 1 / matrix[current_city][city]
+            print('visibility : ', visibility)
+
+            print('denominator_sum : ', denominator_sum)
+            denominator_sum += pow(intensity, alpha) * pow(visibility, beta)
+            print('denominator_sum : ', denominator_sum)
+        
 
     for city in available_cities:
         intensity = pheromone_matrix[current_city][city]
@@ -87,9 +110,9 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
             for _ in range(len(cities_to_pass) - 1):
 
                 next_city = Get_Next_City(graph, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta)
-                if next_city == None:
-                    break
-                
+                # if next_city == None:
+                #     break
+
                 path.append(next_city)
                 current_city = next_city
 
