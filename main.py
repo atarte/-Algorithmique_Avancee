@@ -103,6 +103,7 @@ if __name__ == '__main__':
 
     nb_vertex = 20
     nb_cities_to_pass = 10
+    nb_test = 5
 
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
@@ -128,6 +129,8 @@ if __name__ == '__main__':
 
     # full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
     # print(full_path)
+
+    expl.Limit_Ant(tsp_matrix, cities_to_pass, nb_test)
 
     # Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
 
