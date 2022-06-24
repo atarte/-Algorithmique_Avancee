@@ -1,5 +1,5 @@
 import graph_generation as gg
-import convertion_TSP as ct
+import convertion_tsp as ct
 import tsp_ant as ant
 # import shortest_path_Dijkstra as short
 import experience_plan as expl

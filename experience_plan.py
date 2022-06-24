@@ -90,12 +90,12 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
 
     list_average = []
 
-    for alpha in VarAlpha:
-        for beta in VarBeta:
-            for evaporation_factor in VarEvap:
-                for pheromone_spread in VarPheromone:
-                    for interation in VarIteration:
-                        for ant in VarAnt:
+    for interation in VarIteration:
+        for ant in VarAnt:
+            for alpha in VarAlpha:
+                for beta in VarBeta:
+                    for evaporation_factor in VarEvap:
+                        for pheromone_spread in VarPheromone:
                             current_values = []
 
                             for _ in range(nb_test):
@@ -115,4 +115,4 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
 
     print(total_average + total_derivation)
     print(total_average)
-    print(total_average - total_average)
+    print(total_average - total_derivation)
