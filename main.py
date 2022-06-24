@@ -102,9 +102,10 @@ if __name__ == '__main__':
     # rand.seed(a=3)
 
     nb_vertex = 20
-    nb_cities_to_pass = 10
+    nb_cities_to_pass = 20
     nb_test = 5
 
+    start = time.process_time()
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
     cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
@@ -112,23 +113,22 @@ if __name__ == '__main__':
 
     tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
-    start = time.process_time()
     path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
-    stop = time.process_time()
-    print("calculé en ", stop-start, 's')
 
     # info1 = ant.Ant_Tsp.cache_info()
     # info2 = ant.Get_Path_Lenght.cache_info()
     # print(info1)
     # print(info2)
 
-    # print('optimal path : ', path)
-    # print('optimal path lenght : ', path_lenght)
+    print('optimal path : ', path)
+    print('optimal path lenght : ', path_lenght)
 
     # Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
 
-    # full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
-    # print(full_path)
+    full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
+    print(full_path)
+    stop = time.process_time()
+    print("calculé en ", stop-start, 's')
 
     expl.Limit_Ant(tsp_matrix, cities_to_pass, nb_test)
 

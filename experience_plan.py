@@ -22,9 +22,15 @@ def Convert_to_complete(matrix, city_to_pass):
 
 def Borne(nb_vertex, tsp_matrix):
     StateMat = {}
+    OrderList = {}
     for i in range(nb_vertex):
         for j in range(nb_vertex):  # create a binary variable
-            StateMat[i, j] = LpVariable('x{},{}'.format(i, j), cat='Binary')
+            StateMat[i, j] = LpVariable('x{},{}'.format(
+                i, j), lowBound=0, upBound=1, cat=const.LpBinary)
+
+    for i in range(nb_vertex):  # create a binary variable
+        OrderList[i] = LpVariable('u{}'.format(
+            i), lowBound=1, upBound=nb_vertex, cat=const.LpInteger)
 
     # probleme
     prob = LpProblem("Shortest_Delivery", LpMinimize)
@@ -37,14 +43,22 @@ def Borne(nb_vertex, tsp_matrix):
     # contrainte
     for n in range(nb_vertex):
         prob += lpSum([StateMat[n, m] for m in range(nb_vertex)]
-                      ) == 1, "One place constraint "+str(n)
+                      ) == 1, "All entered constraint "+str(n)
+        prob += lpSum([StateMat[m, n] for m in range(nb_vertex)]
+                      ) == 1, "All exited constraint "+str(n)
+
+    for i in range(nb_vertex):
+        for j in range(nb_vertex):
+            if i != j and (i != 0 and j != 0):
+                prob += OrderList[i] - OrderList[j] <= nb_vertex * \
+                    (1 - StateMat[i, j]) - 1
 
     cont2 = lpSum([StateMat[m, m]
                   for m in range(nb_vertex)]) == 0, "No loop constraint"
     prob += cont2
 
     prob.solve()
-    return value(prob.objective) if (LpStatus[prob.status] == "Optimal") else None
+    return prob.objective.value() if (LpStatus[prob.status] == "Optimal") else None
 
 
 def Limit_Ant(graph, cities_to_pass, nb_test):
