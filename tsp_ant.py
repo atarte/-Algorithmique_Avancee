@@ -79,11 +79,13 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
     '''
     Returns the optimal path through the verteces <cities_to_pass> of the graph <graph> with the algoritm "Ant Colony Optimization"
     '''
-    pheromone_matrix = [[1 for _ in graph] for _ in graph]
     best_path = ()
     shortest_path = sys.maxsize
 
     for _ in range(nb_iteration):
+        pheromone_matrix = tuple 
+        444([1 for _ in graph] for _ in graph)
+
         for _ in range(nb_ant):
 
             path = []
