@@ -3,6 +3,7 @@ import convertion_tsp as ct
 import tsp_ant as ant
 # import shortest_path_Dijkstra as short
 import experience_plan as expl
+import split_vrp as split
 
 from matplotlib import style
 # from random import sample
@@ -32,6 +33,7 @@ def Draw_Graph(graph, cities_to_pass=[], path=[]):
     Draw a graph from an adjacency matrix
     '''
     G = nx.Graph()
+    nb_vertex = len(graph)
 
     for i in range(nb_vertex):
         if sum(graph[i]) != 0:
@@ -75,14 +77,15 @@ def Draw_Graph(graph, cities_to_pass=[], path=[]):
     # positions for all nodes
     pos = nx.spring_layout(G)
     # pos = nx.circular_layout(G)
+    # pos = nx.random_layout(G)
 
     # nodes
-    nx.draw_networkx_nodes(G, pos, node_size=700,
+    nx.draw_networkx_nodes(G, pos, node_size=500,
                            node_color=colorListNode, alpha=0.9)
 
     # labels
     nx.draw_networkx_labels(G, pos, labels=labels_nodes,
-                            font_size=20,
+                            font_size=15,
                             font_color='black',
                             font_family='sans-serif')
 
@@ -98,34 +101,41 @@ def Draw_Graph(graph, cities_to_pass=[], path=[]):
 if __name__ == '__main__':
     # rand.seed(a=3)
 
-    nb_vertex = 231
-    nb_cities_to_pass = 231
+    nb_vertex = 20
+    nb_cities_to_pass = 10
     nb_test = 1
 
     start = time.process_time()
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
+    # Draw_Graph(matrix)
+
     cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
-    # print(cities_to_pass)
+    # # print(cities_to_pass)
 
     tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
     path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
 
-    # info1 = ant.Ant_Tsp.cache_info()
-    # info2 = ant.Get_Path_Lenght.cache_info()
-    # print(info1)
-    # print(info2)
+    # # info1 = ant.Ant_Tsp.cache_info()
+    # # info2 = ant.Get_Path_Lenght.cache_info()
+    # # print(info1)
+    # # print(info2)
 
-    print('optimal path : ', path)
-    print('optimal path lenght : ', path_lenght)
+    # print('optimal path : ', path)
+    # print('optimal path lenght : ', path_lenght)
 
-    #  Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
+    # #  Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
 
     full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
     print(full_path)
-    stop = time.process_time()
-    print("calculé en ", stop-start, 's')
+    # stop = time.process_time()
+    # print("calculé en ", stop-start, 's')
+    
+    nb_truck = 3
+
+    _ = split.Split_After_Tsp(matrix, full_path, path_lenght, nb_truck)
+
 
     # for i in range(237):
     #     matrix[i] = tuple(matrix[i])
