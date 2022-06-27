@@ -1,6 +1,7 @@
 import sys
-# import random as rand
+import random as rand
 from functools import lru_cache
+from copy import *
 
 
 def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, alpha, beta):
@@ -12,32 +13,18 @@ def Get_Next_City(matrix, pheromone_matrix, path, cities_to_pass, current_city, 
     available_cities = tuple(city for city in cities_to_pass if city not in path)
 
     for city in available_cities:
-        # intensity = pheromone_matrix[current_city][city]
-        # visibility = 1 / matrix[current_city][city]
-        # denominator_sum += pow(intensity, alpha) * pow(visibility, beta)
         denominator_sum += pow(pheromone_matrix[current_city]
                                [city], alpha) * pow(1 / matrix[current_city][city], beta)
 
 
     for city in available_cities:
-        # intensity = pheromone_matrix[current_city][city]
-        # visibility = 1 / matrix[current_city][city]
-        # probability = (pow(intensity, alpha) * pow(visibility, beta)) / denominator_sum
-        # probabilities_list.append([
-        #     city,
-        #     probability
-        # ])
-        probabilities_list.append([
-            city,
+
+        probabilities_list.append(
             (pow(pheromone_matrix[current_city][city], alpha)
              * pow(1 / matrix[current_city][city], beta)) / denominator_sum
-        ])
+        )
 
-
-    probabilities_list_sorted = sorted(
-        probabilities_list, key=lambda x: x[1], reverse=True)
-
-    return probabilities_list_sorted[0][0]
+    return rand.choices(available_cities, weights=probabilities_list, k=1)[0]
 
 
 def Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread):
@@ -48,9 +35,6 @@ def Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, ph
 
     for i in range(len(pheromone_matrix)):
         for j in range(len(pheromone_matrix)):
-            # pheromone_matrix[i][j] *= (1 - evaporation_factor)
-            # if pheromone_matrix[i][j] <= 1.0e-250:
-            #     pheromone_matrix[i][j] = 1.0e-10
             pheromone_matrix[i][j] = pheromone_matrix[i][j] * \
                 evaporation_factor if pheromone_matrix[i][j] <= 1.0e-250 else 1.0e-10
 
@@ -74,22 +58,20 @@ def Get_Path_Lenght(graph, path):
     return path_lenght
 
 
-@lru_cache(maxsize=512)
-def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, beta=2.0, evaporation_factor=0.3, pheromone_spread=1.0):
+def Ant_Tsp(graph, cities_to_pass, nb_iteration = 50, nb_ant = 25, alpha=0.5, beta=5.0, evaporation_factor=0.25, pheromone_spread=0.9):
     '''
     Returns the optimal path through the verteces <cities_to_pass> of the graph <graph> with the algoritm "Ant Colony Optimization"
     '''
     best_path = ()
     shortest_path = sys.maxsize
+    pheromone = tuple([1 for _ in graph] for _ in graph)
 
     for _ in range(nb_iteration):
-        pheromone_matrix = tuple ([1 for _ in graph] for _ in graph)
-
+        pheromone_matrix = deepcopy(pheromone)
         for _ in range(nb_ant):
 
             path = []
-            # current_city = rand.choice(cities_to_pass)
-            current_city = cities_to_pass[0]
+            current_city = rand.choice(cities_to_pass)
             path.append(current_city)
 
             for _ in range(len(cities_to_pass) - 1):
@@ -109,6 +91,3 @@ def Ant_Tsp(graph, cities_to_pass, nb_iteration = 100, nb_ant = 10, alpha=1.0, b
             pheromone_matrix = Update_Pheromone(pheromone_matrix, path, path_lenght, evaporation_factor, pheromone_spread)
 
     return best_path, shortest_path
-
-
-# if __name__ == '__main__':
