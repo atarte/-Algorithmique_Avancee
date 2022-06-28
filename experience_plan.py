@@ -57,7 +57,7 @@ def Borne(nb_vertex, tsp_matrix):
                   for m in range(nb_vertex)]) == 0, "No loop constraint"
     prob += cont2
 
-    prob.solve()
+    prob.solve(PULP_CBC_CMD(msg=0, timeLimit=300))
     return prob.objective.value() if (LpStatus[prob.status] == "Optimal") else None
 
 
@@ -74,10 +74,10 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
     
     nb_steps_bar = nb_test
 
-    VarIteration = range(10, 100, 25)
+    VarIteration = range(2, 100, 10)
     nb_steps_bar *= len(VarIteration)
 
-    VarAnt = range(10, 100, 25)
+    VarAnt = range(2, 100, 10)
     nb_steps_bar *= len(VarAnt)
 
     VarAlpha = range(5, 50, 10)
@@ -89,7 +89,7 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
     VarEvap = range(25, 55, 10)
     nb_steps_bar *= len(VarEvap)
 
-    VarPheromone = range(90, 120, 15)
+    VarPheromone = range(90, 120, 10)
     nb_steps_bar *= len(VarPheromone)
 
     print(nb_steps_bar)
@@ -104,7 +104,7 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
 
     list_average = []
 
-    for interation in VarIteration:
+    for iteration in VarIteration:
         for ant in VarAnt:
             for alpha in VarAlpha:
                 for beta in VarBeta:
@@ -113,7 +113,7 @@ def Limit_Ant(graph, cities_to_pass, nb_test):
                             current_values = []
 
                             for _ in range(nb_test):
-                                _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha/10, 
+                                _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=iteration, nb_ant=ant, alpha=alpha/10, 
                                             beta=beta/10, evaporation_factor=evaporation_factor/100, pheromone_spread=pheromone_spread/100)
                                 
                                 current_values.append((path_lenght / limit) * 100)
@@ -142,10 +142,10 @@ def Optimal_parameters(graph, cities_to_pass, nb_test):
 
     nb_steps_bar = nb_test
 
-    VarIteration = range(2, 100, 10)
+    VarIteration = range(5, 100, 10)
     nb_steps_bar *= len(VarIteration)
 
-    VarAnt = range(2, 100, 10)
+    VarAnt = range(10, 100, 10)
     nb_steps_bar *= len(VarAnt)
 
     VarAlpha = range(5, 50, 10)
@@ -157,7 +157,7 @@ def Optimal_parameters(graph, cities_to_pass, nb_test):
     VarEvap = range(25, 55, 10)
     nb_steps_bar *= len(VarEvap)
 
-    VarPheromone = range(90, 120, 15)
+    VarPheromone = range(90, 120, 10)
     nb_steps_bar *= len(VarPheromone)
 
     print(nb_steps_bar)
@@ -174,19 +174,19 @@ def Optimal_parameters(graph, cities_to_pass, nb_test):
     list_compo = []
 
     limit_attempt = False
-    limit_acceptation = 110
+    limit_acceptation = 104
 
     for alpha in VarAlpha:
         for beta in VarBeta:
             for evaporation_factor in VarEvap:
                 for pheromone_spread in VarPheromone:
-                    for interation in VarIteration:
+                    for iteration in VarIteration:
                         for ant in VarAnt:
                             current_values = []
 
                             for _ in range(nb_test):
                                 if not limit_attempt :
-                                    _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=interation, nb_ant=ant, alpha=alpha/10,
+                                    _, path_lenght = tsp_ant.Ant_Tsp(graph, cities_to_pass, nb_iteration=iteration, nb_ant=ant, alpha=alpha/10,
                                                                     beta=beta/10, evaporation_factor=evaporation_factor/100, pheromone_spread=pheromone_spread/100)
 
                                     current_values.append(
@@ -198,13 +198,12 @@ def Optimal_parameters(graph, cities_to_pass, nb_test):
                             if not limit_attempt: 
                                 value_calculate = np.mean(current_values)
                                 list_average.append(value_calculate)
-                                list_compo.append((alpha, beta, evaporation_factor, pheromone_spread, interation, ant))
+                                list_compo.append((alpha, beta, evaporation_factor, pheromone_spread, iteration, ant))
 
                                 print(value_calculate)
+                                print("iteration : ", iteration, " ant : ", ant, " alpha : ", alpha/10, " beta : ", beta/10, " evap : ", evaporation_factor/100, " pheromone : ", pheromone_spread/100)
                                 if value_calculate <= limit_acceptation:
                                     limit_attempt = True
-    
-    print(list_compo)
 
     Textbar.finish()
 

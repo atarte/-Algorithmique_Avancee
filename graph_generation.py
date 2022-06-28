@@ -23,7 +23,7 @@ def Fix_Matrix_Not_Connected(matrix):
     new_neighbour = rand.choice(neighbour_to_connect)
 
     # weight = 1
-    weight = rand.randint(1, 10)
+    weight = rand.randint(1, 100)
 
     matrix[rand_vertex][new_neighbour] = weight
     matrix[new_neighbour][rand_vertex] = weight
@@ -67,7 +67,7 @@ def Get_Adjacency_Matrix(nb_vertex):
     for row in range(nb_vertex):
         for column in range(nb_vertex):
             if rand.randint(1, 100) <= completion_matrix:
-                weight = rand.randint(1, 10)
+                weight = rand.randint(1, 100)
 
                 matrix[row][column] = weight
                 matrix[column][row] = weight
