@@ -5,8 +5,6 @@ def Split_After_Tsp(graph, path, path_lenght, nb_truck):
     Split a path into a number of sub path
     '''
     starting_vertex = path[0]
-    print(starting_vertex)
-
     aproximate_dist = path_lenght/nb_truck
     new_path = [[] for _ in range(nb_truck)]
 

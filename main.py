@@ -28,7 +28,7 @@ def Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass):
     return tuple(rand.sample(range(nb_vertex), nb_cities_to_pass))
 
 
-def Draw_Graph(graph, cities_to_pass=[], path=[]):
+def Draw_Graph(graph, weighted=False, cities_to_pass=[], path=[]):
     '''
     Draw a graph from an adjacency matrix
     '''
@@ -91,8 +91,10 @@ def Draw_Graph(graph, cities_to_pass=[], path=[]):
 
     # edges
     nx.draw_networkx_edges(G, pos, width=1, edge_color=colors)
-    nx.draw_networkx_edge_labels(
-        G, pos, edge_labels=labels_edges, font_color='red')
+    
+    if weighted:
+        nx.draw_networkx_edge_labels(
+            G, pos, edge_labels=labels_edges, font_color='red')
 
     plt.axis('off')
     plt.show()
@@ -108,14 +110,14 @@ if __name__ == '__main__':
     start = time.process_time()
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
 
-    # Draw_Graph(matrix)
+    Draw_Graph(matrix)
 
-    cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
-    # # print(cities_to_pass)
+    # cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
+    # # # print(cities_to_pass)
 
-    tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
+    # tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
-    path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
+    # path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
 
     # # info1 = ant.Ant_Tsp.cache_info()
     # # info2 = ant.Get_Path_Lenght.cache_info()
@@ -127,14 +129,14 @@ if __name__ == '__main__':
 
     # #  Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
 
-    full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
-    print(full_path)
-    # stop = time.process_time()
-    # print("calculé en ", stop-start, 's')
+    # full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
+    # print(full_path)
+    # # stop = time.process_time()
+    # # print("calculé en ", stop-start, 's')
     
-    nb_truck = 3
+    # nb_truck = 3
 
-    _ = split.Split_After_Tsp(matrix, full_path, path_lenght, nb_truck)
+    # _ = split.Split_After_Tsp(matrix, full_path, path_lenght, nb_truck)
 
 
     # for i in range(237):
