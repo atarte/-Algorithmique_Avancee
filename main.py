@@ -102,49 +102,53 @@ def Draw_Graph(graph, weighted=False, cities_to_pass=[], path=[]):
 
 if __name__ == '__main__':
     # rand.seed(a=3)
+    # nb_test = 1
+    # expl.Optimal_parameters(tsp_matrix, cities_to_pass, nb_test)
 
     nb_vertex = 20
     nb_cities_to_pass = 10
-    nb_test = 1
+    nb_truck = 3
 
+    # Generate Graph
     start = time.process_time()
     matrix = gg.Get_Adjacency_Matrix(nb_vertex)
-
-    Draw_Graph(matrix)
-
-    # cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
-    # # # print(cities_to_pass)
-
-    # tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
-
-    # path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
-
-    # # info1 = ant.Ant_Tsp.cache_info()
-    # # info2 = ant.Get_Path_Lenght.cache_info()
-    # # print(info1)
-    # # print(info2)
-
-    # print('optimal path : ', path)
-    # print('optimal path lenght : ', path_lenght)
-
-    # #  Draw_Graph(tsp_matrix, cities_to_pass=cities_to_pass, path=path)
-
-    # full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
-    # print(full_path)
-    # # stop = time.process_time()
-    # # print("calculé en ", stop-start, 's')
+    print('matrix : ')
+    for m in matrix:
+        print(m)
+    print()
     
-    # nb_truck = 3
+    Draw_Graph(matrix, weighted=True)
 
-    # _ = split.Split_After_Tsp(matrix, full_path, path_lenght, nb_truck)
+    # Get the citie to pass
+    cities_to_pass = Get_Cities_To_Pass(nb_vertex, nb_cities_to_pass)
+    print('citie to pass : ', cities_to_pass)
+    print()
 
+    Draw_Graph(matrix, cities_to_pass=cities_to_pass)
 
-    # for i in range(237):
-    #     matrix[i] = tuple(matrix[i])
+    # Solve with ACO
+    tsp_matrix = ct.Convert_Uncomplete_Graph_To_Tsp(matrix, nb_vertex, cities_to_pass)
 
-    # expl.Optimal_parameters(tsp_matrix, cities_to_pass, nb_test)
+    path, path_lenght = ant.Ant_Tsp(tsp_matrix, cities_to_pass)
+    # print('optimal path : ', path)
+    print('optimal path lenght : ', path_lenght)
 
-    # Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
+    full_path = ct.Get_Full_Path_from_Tsp_Path(matrix, path)
+    print('optimal path : ', full_path)
+    print()
+
+    Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=full_path)
+
+    # Split the path
+    cluster_path = split.Split_After_Tsp(matrix, full_path, path_lenght, nb_truck)
+
+    for i in range(len(cluster_path)):
+        cluster_lenght = ant.Get_Path_Lenght(matrix, tuple(cluster_path[i]))
+        print('truck n°', i + 1, ', path lenght : ', cluster_lenght)
+        print('path : ', cluster_path[i])
+
+        Draw_Graph(matrix, cities_to_pass=cities_to_pass, path=cluster_path[i])
+
 
     
 
